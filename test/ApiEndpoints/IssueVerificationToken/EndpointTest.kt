@@ -1,9 +1,7 @@
 package ApiEndpoints.IssueVerificationToken
 
-import IssueVerificationToken.SecureTokenSource
 import IssueVerificationToken.UseCase
 import IssueVerificationToken.VerificationToken
-import IssueVerificationToken.VerificationTokenGateway
 import doubles.FakeVerificationTokenGateway
 import doubles.StubSecureTokenSource
 import org.junit.Assert.assertEquals
