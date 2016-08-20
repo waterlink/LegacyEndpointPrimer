@@ -1,8 +1,8 @@
 package IssueVerificationToken
 
 data class VerificationToken(val issuer: String,
-                             val deviceId: Any,
-                             val phoneNumber: Any,
+                             val deviceId: String,
+                             val phoneNumber: String,
                              val secureToken: String) {
 
 }
