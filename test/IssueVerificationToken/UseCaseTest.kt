@@ -18,28 +18,28 @@ class UseCaseTest {
     private val fakeVerificationTokenGateway = FakeVerificationTokenGateway()
     private val useCase = UseCase(secureTokenSource, fakeVerificationTokenGateway)
 
-    private val oldApiVersion = "v1"
+    private val oldTokenIssuer = OldTokenIssuer()
 
     @Test
     fun issueVerificationToken_returnsCorrectToken() {
         assertEquals(VerificationToken(oldIssuer, deviceId, phoneNumber, preparedSecureToken),
-                useCase.issueVerificationToken(deviceId, phoneNumber, oldApiVersion))
+                useCase.issueVerificationToken(deviceId, phoneNumber, oldTokenIssuer))
     }
 
     @Test
     fun issueVerificationToken_persistsCreatedToken() {
-        useCase.issueVerificationToken(deviceId, phoneNumber, oldApiVersion)
+        useCase.issueVerificationToken(deviceId, phoneNumber, oldTokenIssuer)
         assertEquals(listOf(VerificationToken(oldIssuer, deviceId, phoneNumber, preparedSecureToken)),
                 fakeVerificationTokenGateway.persistedTokens)
     }
 
-    private val newApiVersion = "v2"
+    private val urlTokenIssuer = UrlTokenIssuer()
     private val newIssuer = "https://tddfellow.com"
 
     @Test
     fun issueVerificationToken_generatesNewIssuer_whenApiVersionIsNew() {
         assertEquals(VerificationToken(newIssuer, deviceId, phoneNumber, preparedSecureToken),
-                useCase.issueVerificationToken(deviceId, phoneNumber, newApiVersion))
+                useCase.issueVerificationToken(deviceId, phoneNumber, urlTokenIssuer))
     }
 
     private val differentDeviceId = "6144e9e9-b3f5-48a9-afa1-8a4bdc3b377a"
@@ -47,12 +47,12 @@ class UseCaseTest {
     @Test
     fun issueVerificationToken_whenDeviceIdIsDifferent_returnsCorrectToken() {
         assertEquals(VerificationToken(oldIssuer, differentDeviceId, phoneNumber, preparedSecureToken),
-                useCase.issueVerificationToken(differentDeviceId, phoneNumber, oldApiVersion))
+                useCase.issueVerificationToken(differentDeviceId, phoneNumber, oldTokenIssuer))
     }
 
     @Test
     fun issueVerificationToken_whenDeviceIdIsDifferent_persistsCreatedToken() {
-        useCase.issueVerificationToken(differentDeviceId, phoneNumber, oldApiVersion)
+        useCase.issueVerificationToken(differentDeviceId, phoneNumber, oldTokenIssuer)
         assertEquals(listOf(VerificationToken(oldIssuer, differentDeviceId, phoneNumber, preparedSecureToken)),
                 fakeVerificationTokenGateway.persistedTokens)
     }
@@ -62,12 +62,12 @@ class UseCaseTest {
     @Test
     fun issueVerificationToken_whenPhoneNumberIsDifferent_returnsCorrectToken() {
         assertEquals(VerificationToken(oldIssuer, deviceId, differentPhoneNumber, preparedSecureToken),
-                useCase.issueVerificationToken(deviceId, differentPhoneNumber, oldApiVersion))
+                useCase.issueVerificationToken(deviceId, differentPhoneNumber, oldTokenIssuer))
     }
 
     @Test
     fun issueVerificationToken_whenPhoneNumberIsDifferent_persistsCreatedToken() {
-        useCase.issueVerificationToken(deviceId, differentPhoneNumber, oldApiVersion)
+        useCase.issueVerificationToken(deviceId, differentPhoneNumber, oldTokenIssuer)
         assertEquals(listOf(VerificationToken(oldIssuer, deviceId, differentPhoneNumber, preparedSecureToken)),
                 fakeVerificationTokenGateway.persistedTokens)
     }
@@ -81,12 +81,12 @@ class UseCaseTest {
     @Test
     fun issueVerificationToken_whenSecureTokenSourceReturnsDifferentToken_returnsCorrectToken() {
         assertEquals(VerificationToken(oldIssuer, deviceId, phoneNumber, differentPreparedSecureToken),
-                useCaseGeneratingDifferentToken.issueVerificationToken(deviceId, phoneNumber, oldApiVersion))
+                useCaseGeneratingDifferentToken.issueVerificationToken(deviceId, phoneNumber, oldTokenIssuer))
     }
 
     @Test
     fun issueVerificationToken_whenSecureTokenSourceReturnsDifferentToken_persistsCreatedToken() {
-        useCaseGeneratingDifferentToken.issueVerificationToken(deviceId, phoneNumber, oldApiVersion)
+        useCaseGeneratingDifferentToken.issueVerificationToken(deviceId, phoneNumber, oldTokenIssuer)
         assertEquals(listOf(VerificationToken(oldIssuer, deviceId, phoneNumber, differentPreparedSecureToken)),
                 fakeVerificationTokenGateway.persistedTokens)
     }

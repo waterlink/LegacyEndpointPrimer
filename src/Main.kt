@@ -1,7 +1,5 @@
 import ApiEndpoints.IssueVerificationToken.Endpoint
-import IssueVerificationToken.DummyVerificationTokenGateway
-import IssueVerificationToken.SimpleSecureTokenSource
-import IssueVerificationToken.UseCase
+import IssueVerificationToken.*
 import spark.Spark
 
 fun main(args: Array<String>) {
@@ -15,7 +13,7 @@ fun main(args: Array<String>) {
         issueVerificationTokenEndpoint.issueVerificationToken(
                 deviceId = request.queryParams("deviceId"),
                 phoneNumber = request.queryParams("phoneNumber"),
-                apiVersion = "v1"
+                tokenIssuer = OldTokenIssuer()
         )
     }
 
@@ -23,7 +21,7 @@ fun main(args: Array<String>) {
         issueVerificationTokenEndpoint.issueVerificationToken(
                 deviceId = request.queryParams("deviceId"),
                 phoneNumber = request.queryParams("phoneNumber"),
-                apiVersion = "v2"
+                tokenIssuer = UrlTokenIssuer()
         )
     }
 }
