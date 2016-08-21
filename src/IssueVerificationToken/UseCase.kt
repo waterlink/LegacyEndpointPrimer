@@ -8,10 +8,8 @@ class UseCase(private val secureTokenSource: SecureTokenSource,
     private val OLD_API_VERSION = "v1"
 
     fun issueVerificationToken(deviceId: String, phoneNumber: String, apiVersion: String): VerificationToken {
-        val issuer = getIssuerFor(apiVersion)
-
         val verificationToken = VerificationToken(
-                issuer = issuer,
+                issuer = getIssuerFor(apiVersion),
                 deviceId = deviceId,
                 phoneNumber = phoneNumber,
                 secureToken = secureTokenSource.generateToken()
