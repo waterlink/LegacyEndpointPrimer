@@ -1,13 +1,13 @@
 package IssueVerificationToken
 
-open class UseCase(private val secureTokenSource: SecureTokenSource,
+class UseCase(private val secureTokenSource: SecureTokenSource,
                    private val verificationTokenGateway: VerificationTokenGateway) {
 
     private val OLD_ISSUER = "com.tddfellow"
     private val NEW_ISSUER = "https://tddfellow.com"
     private val OLD_API_VERSION = "v1"
 
-    open fun issueVerificationToken(deviceId: String, phoneNumber: String, apiVersion: String): VerificationToken {
+    fun issueVerificationToken(deviceId: String, phoneNumber: String, apiVersion: String): VerificationToken {
         val issuer = getIssuerFor(apiVersion)
 
         val verificationToken = VerificationToken(
