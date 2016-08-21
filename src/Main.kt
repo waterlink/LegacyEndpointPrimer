@@ -14,7 +14,16 @@ fun main(args: Array<String>) {
     Spark.get("/api/v1/issueVerificationToken") { request, response ->
         issueVerificationTokenEndpoint.issueVerificationToken(
                 deviceId = request.queryParams("deviceId"),
-                phoneNumber = request.queryParams("phoneNumber")
+                phoneNumber = request.queryParams("phoneNumber"),
+                apiVersion = "v1"
+        )
+    }
+
+    Spark.get("/api/v2/issueVerificationToken") { request, response ->
+        issueVerificationTokenEndpoint.issueVerificationToken(
+                deviceId = request.queryParams("deviceId"),
+                phoneNumber = request.queryParams("phoneNumber"),
+                apiVersion = "v2"
         )
     }
 }

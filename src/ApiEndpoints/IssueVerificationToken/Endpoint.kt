@@ -4,8 +4,8 @@ import IssueVerificationToken.UseCase
 
 class Endpoint(private val useCase: UseCase) {
 
-    fun issueVerificationToken(deviceId: String, phoneNumber: String): IssueVerificationTokenEndpointResponse {
-        val issueVerificationToken = useCase.issueVerificationToken(deviceId, phoneNumber)
+    fun issueVerificationToken(deviceId: String, phoneNumber: String, apiVersion: String): IssueVerificationTokenEndpointResponse {
+        val issueVerificationToken = useCase.issueVerificationToken(deviceId, phoneNumber, apiVersion)
 
         return IssueVerificationTokenEndpointResponse(
                 issuer = issueVerificationToken.issuer,
