@@ -18,18 +18,20 @@ class EndpointTest {
 
     private val deviceId = "device_id"
     private val phoneNumber = "phone_number"
-    private val expectedIssuer = "com.tddfellow"
+    private val oldIssuer = "com.tddfellow"
+
+    private val oldVersion = "v1"
 
     @Test
     fun issueVerificationToken() {
-        assertEquals(IssueVerificationTokenEndpointResponse(expectedIssuer, secureToken),
-                endpoint.issueVerificationToken(deviceId, phoneNumber))
+        assertEquals(IssueVerificationTokenEndpointResponse(oldIssuer, secureToken),
+                endpoint.issueVerificationToken(deviceId, phoneNumber, oldVersion))
     }
 
     @Test
     fun issueVerificationToken_usesPassedInParametersToIssueToken() {
-        endpoint.issueVerificationToken(deviceId, phoneNumber)
-        assertEquals(VerificationToken(expectedIssuer, deviceId, phoneNumber, secureToken),
+        endpoint.issueVerificationToken(deviceId, phoneNumber, oldVersion)
+        assertEquals(VerificationToken(oldIssuer, deviceId, phoneNumber, secureToken),
                 verificationTokenGateway.persistedTokens.first())
     }
 
@@ -38,8 +40,8 @@ class EndpointTest {
 
     @Test
     fun issueVerificationToken_usesPassedInParametersToIssueToken_whenTheyAreDifferent() {
-        endpoint.issueVerificationToken(differentDeviceId, differentPhoneNumber)
-        assertEquals(VerificationToken(expectedIssuer, differentDeviceId, differentPhoneNumber, secureToken),
+        endpoint.issueVerificationToken(differentDeviceId, differentPhoneNumber, oldVersion)
+        assertEquals(VerificationToken(oldIssuer, differentDeviceId, differentPhoneNumber, secureToken),
                 verificationTokenGateway.persistedTokens.first())
     }
 
@@ -53,8 +55,17 @@ class EndpointTest {
 
     @Test
     fun issueVerificationToken_whenUseCaseReturnsDifferentSecureToken() {
-        assertEquals(IssueVerificationTokenEndpointResponse(expectedIssuer, differentSecureToken),
-                endpointReturningDifferentSecureToken.issueVerificationToken(deviceId, phoneNumber))
+        assertEquals(IssueVerificationTokenEndpointResponse(oldIssuer, differentSecureToken),
+                endpointReturningDifferentSecureToken.issueVerificationToken(deviceId, phoneNumber, oldVersion))
+    }
+
+    private val newVersion = "v2"
+    private val newIssuer = "https://tddfellow.com"
+
+    @Test
+    fun issueVerificationToken_whenNewerVersionIsProvided_returnsTokenWithNewIssuer() {
+        assertEquals(IssueVerificationTokenEndpointResponse(newIssuer, differentSecureToken),
+                endpointReturningDifferentSecureToken.issueVerificationToken(deviceId, phoneNumber, newVersion))
     }
 
 }
